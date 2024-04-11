@@ -41,9 +41,6 @@ async function addContact(name, email, phone) {
     try {
         const data = await fs.promises.readFile(contactsPath);
         const contacts = JSON.parse(data);
-        const nameExist = contacts.find(contact => contact.name === name);
-        const emailExist = contacts.find(contact => contact.email === email);
-        const phoneExist = contacts.find(contact => contact.phone === phone);
         if (!nameExist && !emailExist && !phoneExist) {
             const newContact = { id: uuidv4(), name, email, phone };
             contacts.push(newContact);
@@ -62,10 +59,12 @@ async function updContact(id, name, email, phone) {
         const contacts = JSON.parse(data);
         const neededContact = contacts.find(contact => contact.id === id);
         if (!neededContact) return null;
-        neededContact.name = name;
-        neededContact.email = email;
-        neededContact.phone = phone;
-        await fs.promises.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+        if (name || email || phone) {
+            if (name) neededContact.name = name;
+            if (email) neededContact.email = email;
+            if (phone) neededContact.phone = phone;
+            await fs.promises.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+        }
         return (neededContact)
     } catch (error) {
         return null;
