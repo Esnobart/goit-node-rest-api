@@ -43,6 +43,9 @@ export const updateContact = async (req, res, next) => {
     try {
         const { name, email, phone } = req.body;
         const upContact = await updContact(req.params.id, name, email, phone);
+        if (!upContact) {
+            next (HttpError(404));
+        };
         res.status(200).send(upContact)
     } catch (err) {next (HttpError(400))}
 };
