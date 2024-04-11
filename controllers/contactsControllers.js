@@ -19,7 +19,6 @@ export const deleteContact = async (req, res) => {
 
 export const createContact = async (req, res) => {
     const { name, email, phone, favorite } = req.body;
-    if (!name || !email || !phone) {return res.status(400).json({ message: "Body must have at least one field"})};
     const newContact = await addContact(name, email, phone, favorite);
     if (!newContact) {return res.status(404).json({message: "Contact is already exist"})};
     res.status(201).send(newContact)
