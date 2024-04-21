@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import HttpError from '../helpers/HttpError.js';
 
 const contactsPath = path.join('db', 'contacts.json');
 
@@ -42,13 +41,10 @@ async function addContact(name, email, phone) {
     try {
         const data = await fs.promises.readFile(contactsPath);
         const contacts = JSON.parse(data);
-        if (!nameExist && !emailExist && !phoneExist) {
-            const newContact = { id: uuidv4(), name, email, phone };
-            contacts.push(newContact);
-            await fs.promises.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-            return newContact;
-        }
-        return HttpError(400);
+        const newContact = { id: uuidv4(), name, email, phone };
+        contacts.push(newContact);
+        await fs.promises.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+        return newContact;
     } catch (error) {
       return null;
     }
@@ -60,14 +56,11 @@ async function updContact(id, name, email, phone) {
         const contacts = JSON.parse(data);
         const neededContact = contacts.find(contact => contact.id === id);
         if (!neededContact) return HttpError(404);
-        if (name || email || phone) {
-            if (name) neededContact.name = name;
-            if (email) neededContact.email = email;
-            if (phone) neededContact.phone = phone;
-            await fs.promises.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-            return (neededContact)
-        }
-        return HttpError(400)
+        if (name) neededContact.name = name;
+        if (email) neededContact.email = email;
+        if (phone) neededContact.phone = phone;
+        await fs.promises.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+        return (neededContact)
     } catch (error) {
         return null;
     }

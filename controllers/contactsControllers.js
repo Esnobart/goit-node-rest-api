@@ -5,7 +5,9 @@ export const getAllContacts = async (req, res, next) => {
     try {
         const getContacts = await listContacts();
         res.send(getContacts);
-    } catch (err) {next(HttpError(400))}
+    } catch (err) {
+        next(err)
+    }
 };
 
 export const getOneContact = async (req, res, next) => {
@@ -15,7 +17,9 @@ export const getOneContact = async (req, res, next) => {
             next (HttpError(404));
         }
         res.status(200).send(getContact)
-    } catch (err) {next (HttpError(400))}
+    } catch (err) {
+        next (err)
+    }
 };
 
 export const deleteContact = async (req, res, next) => {
@@ -25,7 +29,9 @@ export const deleteContact = async (req, res, next) => {
             next (HttpError(404));
         }
         res.status(200).send(delContact)
-    } catch (err) {next (HttpError(400))}
+    } catch (err) {
+        next (err)
+    }
 };
 
 export const createContact = async (req, res, next) => {
@@ -36,16 +42,20 @@ export const createContact = async (req, res, next) => {
             next (HttpError(404));
         };
         res.status(201).send(newContact)
-    } catch (err) {next (HttpError(400))}
+    } catch (err) {
+        next (err)
+    }
 };
 
 export const updateContact = async (req, res, next) => {
     try {
         const { name, email, phone } = req.body;
-        const upContact = await updContact(req.params.id, name, email, phone);
-        if (!upContact) {
+        const updatedContact = await updContact(req.params.id, name, email, phone);
+        if (!updatedContact) {
             next (HttpError(404));
         };
-        res.status(200).send(upContact)
-    } catch (err) {next (HttpError(400))}
+        res.status(200).send(updatedContact)
+    } catch (err) {
+        next (err)
+    }
 };
