@@ -9,8 +9,11 @@ import {
 } from "../controllers/contactsControllers.js";
 import validateBody from "../helpers/validateBody.js";
 import { createContactSchema, updateContactSchema } from "../schemas/contactsSchemas.js";
+import { protect } from "../middleware/protectToken.js";
 
 const contactsRouter = express.Router();
+
+contactsRouter.use(protect);
 
 contactsRouter.get("/", getAllContacts);
 
