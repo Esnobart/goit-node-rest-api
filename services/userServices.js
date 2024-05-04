@@ -13,15 +13,15 @@ async function createUser(userData) {
 
 async function findUser({email, password}) {
     const user = await User.findOne({ email });
-    if (!user) throw new HttpError(401);
+    if (!user) throw HttpError(401);
     const isPasswordIsValid = await checkPasswordHash(password, user.password);
-    if (!isPasswordIsValid) throw new HttpError(401, 'Data is incorrect..');
+    if (!isPasswordIsValid) throw HttpError(401, 'Data is incorrect..');
     const token = signToken(user.id);
     user.token = token;
     await user.save();
     await User.findOneAndUpdate({ email }, { token }, { new: true });
     user.password = undefined;
-    return user     
+    return user
 }
 
 export { createUser, findUser };

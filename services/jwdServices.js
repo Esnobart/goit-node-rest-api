@@ -8,11 +8,11 @@ export function signToken(id) {
 };
 
 export function checkToken(token) {
-    if (!token) throw HttpError(401, 'Unauthorized...');
+    if (!token) throw HttpError(401, 'Unauthorized... no token');
     try {
         const { id } = jwt.verify(token, process.env.JWT_SECRET);
         return id
     } catch (err) {
-        throw HttpError(401, 'Unauthorized...')
+        throw HttpError(401, 'Unauthorized... error in checkToken')
     }
 };

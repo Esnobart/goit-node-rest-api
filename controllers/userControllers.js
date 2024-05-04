@@ -28,6 +28,12 @@ export const logIn = async (req, res, next) => {
 
 export const currentUser = async (req, res) => {
     res.status(200).json({
-        user: req.users
+        user: req.user
     })
+}
+
+export const logOut = async (req, res) => {
+    console.log(req.body.token)
+    await User.findOneAndUpdate({ token: req.body.token}, { token: null });
+    res.status(204).send('Success')
 }
