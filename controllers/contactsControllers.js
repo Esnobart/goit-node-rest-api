@@ -3,16 +3,16 @@ import { addContact, getContactById, listContacts, removeContact, updContact, up
 
 export const getAllContacts = async (req, res, next) => {
     try {
-        const getContacts = await listContacts();
+        const getContacts = await listContacts(req.user.id);
         res.send(getContacts);
     } catch (err) {
         next (err)
     }
 };
 
-export const getOneContact = async (req, res) => {
+export const getOneContact = async (req, res, next) => {
     try {
-        const getContact = await getContactById(req.params.id);
+        const getContact = await getContactById(req.params.id, req.user.id);
         if (!getContact) {next (HttpError(404));}
         res.status(200).send(getContact)
     } catch (err) {
@@ -20,9 +20,9 @@ export const getOneContact = async (req, res) => {
     }
 };
 
-export const deleteContact = async (req, res) => {
+export const deleteContact = async (req, res, next) => {
     try {
-        const delContact = await removeContact(req.params.id);
+        const delContact = await removeContact(req.params.id, req.user.id);
         if (!delContact) {next (HttpError(404));}
         res.status(200).send(delContact)
     } catch (err) {
@@ -30,10 +30,11 @@ export const deleteContact = async (req, res) => {
     }
 };
 
-export const createContact = async (req, res) => {
+export const createContact = async (req, res, next) => {
     try {
+        const owner = req.user.id
         const { name, email, phone, favorite } = req.body;
-        const newContact = await addContact(name, email, phone, favorite);
+        const newContact = await addContact(name, email, phone, favorite, owner);
         if (!newContact) {next (HttpError(404));};
         res.status(201).send(newContact)
     } catch (err) {
@@ -41,7 +42,7 @@ export const createContact = async (req, res) => {
     }
 };
 
-export const updateContact = async (req, res) => {
+export const updateContact = async (req, res, next) => {
     try {
         const { name, email, phone } = req.body;
         const upContact = await updContact(req.params.id, name, email, phone);
@@ -51,7 +52,7 @@ export const updateContact = async (req, res) => {
     }
 };
 
-export const updateFavorite = async (req, res) => {
+export const updateFavorite = async (req, res, next) => {
     try {
         const updatedFavorite = await updFavorite(req.params.id, req.body.favorite);
         res.status(200).send(updatedFavorite)

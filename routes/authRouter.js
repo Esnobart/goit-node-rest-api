@@ -10,7 +10,7 @@ authRouter.post('/register', validateBody(signUpUserSchema), signUp);
 
 authRouter.post('/login', validateBody(logInUserSchema), logIn);
 
-authRouter.post('/logout', logOut)
+authRouter.post('/logout', protect, logOut);
 
 authRouter.get('/current', protect, currentUser);
 
