@@ -25,9 +25,9 @@ export class ImageService{
     }
 
     static async saveImage(file, options, ...pathSegments) {
-        // if (file.size > options?.maxFileSize ? options.maxFileSize * 1024 * 1024 : 1 * 1024 * 1024) {
-        //     throw HttpError(400, 'File is too large...')
-        // }
+        if (file.size > options?.maxFileSize ? options.maxFileSize * 1024 * 1024 : 1 * 1024 * 1024) {
+            throw HttpError(400, 'File is too large...')
+        }
 
         const fileName = `${uuidv4()}.jpeg`;
         const pathOrigFile = path.join(process.cwd(), 'tmp');
