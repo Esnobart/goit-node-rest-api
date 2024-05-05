@@ -10,9 +10,7 @@ async function listContacts(contactOwner) {
 
 async function getContactById(contactId, contactOwner) {
     try {
-      const contact = await Contacts.findOne({ _id: contactId }) || null;
-      if (contact.owner !== contactOwner) return null
-      return contact
+      return await Contacts.findOne({ _id: contactId }, { owner: contactOwner}) || null
     } catch (error) {
       return null;
     }
@@ -20,9 +18,7 @@ async function getContactById(contactId, contactOwner) {
 
 async function removeContact(contactId, contactOwner) {
     try {
-        const contact = Contacts.findOne({ _id: contactId });
-        if (contact.owner === contactOwner) return await Contacts.deleteOne({ _id: contactId });
-        return null
+        return await Contacts.deleteOne({ _id: contactId }, { owner: contactOwner});
     } catch (error) {
       return null;
     }
