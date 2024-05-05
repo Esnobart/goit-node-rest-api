@@ -1,6 +1,6 @@
 import { HttpError } from "../helpers/HttpError.js";
 import { User } from "../models/userModel.js";
-import { createUser, findUser } from "../services/userServices.js";
+import { changeAvatar, createUser, findUser } from "../services/userServices.js";
 
 export const signUp = async (req, res, next) => {
     try {
@@ -41,8 +41,21 @@ export const currentUser = async (req, res, next) => {
 export const logOut = async (req, res, next) => {
     try {
         await User.findOneAndUpdate({ token: req.body.token}, { token: null });
-        res.status(204).send({
+        res.status(204).json({
             status: "Success"
+        })
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const newAvatar = async (req, res, next) => {
+    try {
+        const newUser = await changeAvatar(req.user, req.file);
+        console.log(newUser)
+        if (!newUser) throw HttpError(401)
+        res.status(204).json({
+            user: newUser
         })
     } catch (err) {
         next(err)
