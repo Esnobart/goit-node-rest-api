@@ -35,15 +35,15 @@ async function addContact(name, email, phone, favorite, owner) {
 
 async function updContact(id, name, email, phone) {
     try {
-        const updatedContact = await Contacts.findOneAndUpdate({ _id: id }, {name, email, phone}, { new: true });
+        const updatedContact = await Contacts.findOneAndUpdate({ _id: id, owner: owner }, {name, email, phone}, { new: true });
         return updatedContact
     } catch (error) {
         return null;
     }
 }
 
-async function updFavorite(id, favorite) {
-    const updatedFavorite = await Contacts.findOneAndUpdate({ _id: id }, {favorite}, {new: true});
+async function updFavorite(id, favorite, owner) {
+    const updatedFavorite = await Contacts.findOneAndUpdate({ _id: id, owner: owner }, {favorite}, {new: true});
     return updatedFavorite
 }
 
