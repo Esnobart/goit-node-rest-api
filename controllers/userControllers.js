@@ -1,6 +1,7 @@
 import { HttpError } from "../helpers/HttpError.js";
 import { User } from "../models/userModel.js";
-import { changeAvatar, createUser, findUser } from "../services/userServices.js";
+import { sendEMail } from "../services/emailService.js";
+import { changeAvatar, createUser, findUser, findUserByToken } from "../services/userServices.js";
 
 export const signUp = async (req, res, next) => {
     try {
@@ -56,6 +57,32 @@ export const newAvatar = async (req, res, next) => {
         if (!newUser) throw HttpError(401)
         res.status(204).json({
             user: newUser
+        })
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const getUser = async (req, res, next) => {
+    try {
+        const user = await findUserByToken(req.params.verificationToken);
+        if (!user) {
+            throw HttpError(404, 'User not found')
+        }
+        res.status(200).json({
+            message: 'Verification successful'
+        })
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const resendMail = async (req, res, next) => {
+    try {
+        const user = await sendEMail(req.body.email)
+        if (!user) throw HttpError(401, 'Not true')
+        res.status(200).json({
+            message: "Verification email sent"
         })
     } catch (err) {
         next(err)

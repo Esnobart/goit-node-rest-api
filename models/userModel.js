@@ -19,7 +19,14 @@ const userSchema = new Schema({
       type: String,
       default: null,
     },
-    avatarURL:  String
+    avatarURL:  String,
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String
+    }
 });
 
 export const User = model('user', userSchema)
