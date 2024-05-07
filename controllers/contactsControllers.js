@@ -32,9 +32,8 @@ export const deleteContact = async (req, res, next) => {
 
 export const createContact = async (req, res, next) => {
     try {
-        const owner = req.user.id
         const { name, email, phone, favorite } = req.body;
-        const newContact = await addContact(name, email, phone, favorite, owner);
+        const newContact = await addContact(name, email, phone, favorite, req.user.id);
         if (!newContact) {next (HttpError(404));};
         res.status(201).send(newContact)
     } catch (err) {
@@ -45,7 +44,7 @@ export const createContact = async (req, res, next) => {
 export const updateContact = async (req, res, next) => {
     try {
         const { name, email, phone } = req.body;
-        const upContact = await updContact(req.params.id, name, email, phone);
+        const upContact = await updContact(req.params.id, name, email, phone, req.user.id);
         res.status(200).send(upContact)
     } catch (err) {
         next (err)
@@ -54,7 +53,7 @@ export const updateContact = async (req, res, next) => {
 
 export const updateFavorite = async (req, res, next) => {
     try {
-        const updatedFavorite = await updFavorite(req.params.id, req.body.favorite);
+        const updatedFavorite = await updFavorite(req.params.id, req.body.favorite, req.user.id);
         res.status(200).send(updatedFavorite)
     } catch (err) {
         next (err)
