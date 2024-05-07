@@ -33,7 +33,7 @@ async function addContact(name, email, phone, favorite, owner) {
     }
 }
 
-async function updContact(id, name, email, phone) {
+async function updContact(id, name, email, phone, owner) {
     try {
         const updatedContact = await Contacts.findOneAndUpdate({ _id: id, owner: owner }, {name, email, phone}, { new: true });
         return updatedContact
