@@ -9,12 +9,12 @@ export const protect = async (req, res, next) => {
 
         if (!userId) throw HttpError(401);
         const currentUser = await User.findById(userId);
+        if (!currentUser) throw HttpError(401);
 
         if (currentUser.token !== token) {
             throw HttpError(401)
         }
 
-        if (!currentUser) throw HttpError(401);
         req.user = currentUser;
         next();
     } catch (err) {

@@ -3,16 +3,12 @@ import { HttpError } from '../helpers/HttpError.js';
 
 export function signToken(id) {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: 604800,
+        expiresIn: '7d',
     });
 };
 
 export function checkToken(token) {
     if (!token) throw HttpError(401, 'Unauthorized... no token');
-    try {
-        const { id } = jwt.verify(token, process.env.JWT_SECRET);
-        return id
-    } catch (err) {
-        throw HttpError(401, 'Unauthorized... error in checkToken')
-    }
+    const { id } = jwt.verify(token, process.env.JWT_SECRET);
+    return id
 };
