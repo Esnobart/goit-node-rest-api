@@ -4,7 +4,7 @@ import { changeAvatar, createUser, findUser } from "../services/userServices.js"
 
 export const signUp = async (req, res, next) => {
     try {
-        const userExist = await User.exists({ email: req.body.email });
+        const userExist = await User.findOne({ email: req.body.email });
         if (userExist) {
             throw HttpError(409, 'User already exist...')
         };
