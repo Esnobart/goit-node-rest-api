@@ -40,7 +40,7 @@ async function changeAvatar(user, file) {
     return null
 }
 
-async function findUserByToken(token) {
+async function updateToken(token) {
     const user = await User.findOne({ verificationToken: token });
     if (user) {
         user.verificationToken = null;
@@ -51,4 +51,4 @@ async function findUserByToken(token) {
     return null
 }
 
-export { createUser, findUser, changeAvatar, findUserByToken };
+export { createUser, findUser, changeAvatar, updateToken };
