@@ -79,8 +79,10 @@ export const verifyUser = async (req, res, next) => {
 
 export const resendMail = async (req, res, next) => {
     try {
-        const user = await sendEMail(req.body.email)
-        if (!user) throw HttpError(401, 'User doesnt exist')
+        const user = await User.findOne({ email: req.body.email });
+        if (!user) throw HttpError(401, 'User doesnt exist');
+        if (user.verificationToken = null) throw HttpError(401, 'User already verificated')
+        await sendEMail(user)
         res.status(200).json({
             message: "Verification email sent"
         })
