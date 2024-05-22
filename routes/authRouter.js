@@ -4,7 +4,7 @@ import validateBody from "../helpers/validateBody.js";
 import { protect } from "../middleware/protectToken.js";
 import { signUpUserSchema, logInUserSchema } from "../schemas/userSchemas.js";
 import { uploadAvatar } from "../middleware/avatarMiddleware.js";
-import { sendEMail } from "../services/emailService.js";
+import { sendEmailSchema } from "../schemas/emailSchema.js";
 
 const authRouter = Router();
 
@@ -18,7 +18,7 @@ authRouter.get('/current', protect, currentUser);
 
 authRouter.patch('/avatars', protect, uploadAvatar, newAvatar);
 
-authRouter.post('/verify', validateBody(sendEMail), resendMail)
+authRouter.post('/verify', validateBody(sendEmailSchema), resendMail)
 
 authRouter.get('/verify/:verificationToken', verifyUser)
 
