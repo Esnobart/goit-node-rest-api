@@ -13,7 +13,7 @@ async function createUser(userData) {
     const avatarURL = `https://gravatar.com/avatar/${hash}.jpg?d=identicon`;
     const newUser = await User.create({ id: uuidv4(), ...userData, avatarURL, password, verificationToken: uuidv4()});
     newUser.password = undefined;
-    await sendEMail(userData.email)
+    await sendEMail(newUser.email, newUser.verificationToken)
     return (newUser);
 };
 
@@ -33,14 +33,13 @@ async function findUser({email, password}) {
 async function changeAvatar(user, file) {
     if (file) {
         user.avatarURL = await ImageService.saveImage(file);
-        console.log(user.avatarURL)
         const newUser = await User.findByIdAndUpdate({ _id: user.id }, { avatarURL })
         return newUser
     }
     return null
 }
 
-async function updateToken(token) {
+async function verificationUser(token) {
     const user = await User.findOne({ verificationToken: token });
     if (user) {
         user.verificationToken = null;
@@ -51,4 +50,4 @@ async function updateToken(token) {
     return null
 }
 
-export { createUser, findUser, changeAvatar, updateToken };
+export { createUser, findUser, changeAvatar, updaverificationUserteToken };

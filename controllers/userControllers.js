@@ -1,7 +1,7 @@
 import { HttpError } from "../helpers/HttpError.js";
 import { User } from "../models/userModel.js";
 import { sendEMail } from "../services/emailService.js";
-import { changeAvatar, createUser, findUser, updateToken } from "../services/userServices.js";
+import { changeAvatar, createUser, findUser, verificationUser } from "../services/userServices.js";
 
 export const signUp = async (req, res, next) => {
     try {
@@ -65,7 +65,7 @@ export const newAvatar = async (req, res, next) => {
 
 export const verifyUser = async (req, res, next) => {
     try {
-        const user = await updateToken(req.params.verificationToken);
+        const user = await verificationUser(req.params.verificationToken);
         if (!user) {
             throw HttpError(404, 'User not found')
         }
@@ -82,7 +82,7 @@ export const resendMail = async (req, res, next) => {
         const user = await User.findOne({ email: req.body.email });
         if (!user) throw HttpError(401, 'User doesnt exist');
         if (user.verificationToken = null) throw HttpError(401, 'User already verificated')
-        await sendEMail(user)
+        await sendEMail(user.email, user.verificationToken)
         res.status(200).json({
             message: "Verification email sent"
         })
